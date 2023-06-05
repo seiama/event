@@ -1,0 +1,8 @@
+/.gradle/
+/.idea/
+/build/
+/build-logic/.gradle/
+/build-logic/build/
+/event-api/build/
+/run/
+/*.iml
