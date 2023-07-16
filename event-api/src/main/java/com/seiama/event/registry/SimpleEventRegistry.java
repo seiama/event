@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -48,10 +48,10 @@ import static java.util.Objects.requireNonNull;
 public class SimpleEventRegistry<E> implements EventRegistry<E> {
   private static final Comparator<EventSubscription<?>> ORDER_COMPARATOR = Comparator.comparingInt(subscription -> subscription.config().order());
 
-  private final Map<Class<? extends E>, Collection<? extends Class<?>>> classes = new HashMap<>();
+  private final Map<Class<? extends E>, Collection<? extends Class<?>>> classes = new IdentityHashMap<>();
 
-  private final Map<Class<? extends E>, List<EventSubscription<? super E>>> unbaked = new HashMap<>();
-  private final Map<Class<? extends E>, List<EventSubscription<? super E>>> baked = new HashMap<>();
+  private final Map<Class<? extends E>, List<EventSubscription<? super E>>> unbaked = new IdentityHashMap<>();
+  private final Map<Class<? extends E>, List<EventSubscription<? super E>>> baked = new IdentityHashMap<>();
 
   private final Object lock = new Object();
 
