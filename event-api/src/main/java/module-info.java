@@ -23,6 +23,7 @@
  */
 module com.seiama.event {
   requires static transitive org.jetbrains.annotations;
+  requires static transitive org.jspecify;
 
   exports com.seiama.event;
   exports com.seiama.event.bus;

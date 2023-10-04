@@ -29,7 +29,7 @@ import com.seiama.event.EventSubscription;
 import com.seiama.event.registry.EventRegistry;
 import java.util.List;
 import java.util.OptionalInt;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import static java.util.Objects.requireNonNull;
 
@@ -39,6 +39,7 @@ import static java.util.Objects.requireNonNull;
  * @param <E> the base event type
  * @since 1.0.0
  */
+@NullMarked
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class SimpleEventBus<E> implements EventBus<E> {
   protected final EventRegistry<E> registry;
@@ -51,13 +52,13 @@ public class SimpleEventBus<E> implements EventBus<E> {
    * @param exceptions the event exception handler
    * @since 1.0.0
    */
-  public SimpleEventBus(final @NotNull EventRegistry<E> registry, final @NotNull EventBus.EventExceptionHandler exceptions) {
+  public SimpleEventBus(final EventRegistry<E> registry, final EventBus.EventExceptionHandler exceptions) {
     this.registry = requireNonNull(registry, "registry");
     this.exceptions = requireNonNull(exceptions, "exceptions");
   }
 
   @Override
-  public void post(final @NotNull E event, final @NotNull OptionalInt order) {
+  public void post(final E event, final OptionalInt order) {
     @SuppressWarnings("unchecked")
     final Class<? extends E> type = (Class<? extends E>) event.getClass();
     final List<EventSubscription<? super E>> subscriptions = this.registry.subscriptions(type);
@@ -76,7 +77,7 @@ public class SimpleEventBus<E> implements EventBus<E> {
   }
 
   @SuppressWarnings("RedundantIfStatement")
-  protected boolean accepts(final @NotNull EventSubscription<? super E> subscription, final @NotNull E event, final @NotNull OptionalInt order) {
+  protected boolean accepts(final EventSubscription<? super E> subscription, final E event, final OptionalInt order) {
     final EventConfig config = subscription.config();
 
     if (config.exact() && event.getClass() != subscription.event()) return false;

@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import static java.util.Objects.requireNonNull;
 
@@ -45,6 +45,7 @@ import static java.util.Objects.requireNonNull;
  * @param <E> the base event type
  * @since 1.0.0
  */
+@NullMarked
 public class SimpleEventRegistry<E> implements EventRegistry<E> {
   private static final Comparator<EventSubscription<?>> ORDER_COMPARATOR = Comparator.comparingInt(subscription -> subscription.config().order());
 
@@ -63,17 +64,17 @@ public class SimpleEventRegistry<E> implements EventRegistry<E> {
    * @param type the base event type
    * @since 1.0.0
    */
-  public SimpleEventRegistry(final @NotNull Class<E> type) {
+  public SimpleEventRegistry(final Class<E> type) {
     this.type = requireNonNull(type, "type");
   }
 
   @Override
-  public @NotNull Class<E> type() {
+  public Class<E> type() {
     return this.type;
   }
 
   @Override
-  public <T extends E> @NotNull EventSubscription<T> subscribe(final @NotNull Class<T> event, final @NotNull EventConfig config, final @NotNull EventSubscriber<? super T> subscriber) {
+  public <T extends E> EventSubscription<T> subscribe(final Class<T> event, final EventConfig config, final EventSubscriber<? super T> subscriber) {
     requireNonNull(event, "event");
     requireNonNull(config, "config");
     requireNonNull(subscriber, "subscriber");
@@ -87,7 +88,7 @@ public class SimpleEventRegistry<E> implements EventRegistry<E> {
   }
 
   @Override
-  public void unsubscribeIf(final @NotNull Predicate<EventSubscription<? super E>> predicate) {
+  public void unsubscribeIf(final Predicate<EventSubscription<? super E>> predicate) {
     synchronized (this.lock) {
       boolean removedAny = false;
       for (final List<EventSubscription<? super E>> subscriptions : this.unbaked.values()) {
@@ -100,13 +101,13 @@ public class SimpleEventRegistry<E> implements EventRegistry<E> {
   }
 
   @Override
-  public @NotNull List<EventSubscription<? super E>> subscriptions(final @NotNull Class<? extends E> event) {
+  public List<EventSubscription<? super E>> subscriptions(final Class<? extends E> event) {
     synchronized (this.lock) {
       return this.baked.computeIfAbsent(event, this::computeSubscriptions);
     }
   }
 
-  private List<EventSubscription<? super E>> computeSubscriptions(final @NotNull Class<? extends E> event) {
+  private List<EventSubscription<? super E>> computeSubscriptions(final Class<? extends E> event) {
     final List<EventSubscription<? super E>> subscriptions = new ArrayList<>();
     final Collection<? extends Class<?>> types = this.classes.computeIfAbsent(event, this::findClasses);
     for (final Class<?> type : types) {
@@ -139,17 +140,17 @@ public class SimpleEventRegistry<E> implements EventRegistry<E> {
     }
 
     @Override
-    public @NotNull Class<T> event() {
+    public Class<T> event() {
       return this.event;
     }
 
     @Override
-    public @NotNull EventConfig config() {
+    public EventConfig config() {
       return this.config;
     }
 
     @Override
-    public @NotNull EventSubscriber<? super T> subscriber() {
+    public EventSubscriber<? super T> subscriber() {
       return this.subscriber;
     }
 

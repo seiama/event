@@ -28,7 +28,7 @@ import com.seiama.event.EventSubscriber;
 import com.seiama.event.EventSubscription;
 import java.util.List;
 import java.util.function.Predicate;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * An event registry.
@@ -36,6 +36,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <E> the base event type
  * @since 1.0.0
  */
+@NullMarked
 public interface EventRegistry<E> {
   /**
    * Gets the base event type.
@@ -45,7 +46,7 @@ public interface EventRegistry<E> {
    * @return the base event type
    * @since 1.0.0
    */
-  @NotNull Class<E> type();
+  Class<E> type();
 
   /**
    * Determines whether the specified event has subscribers.
@@ -54,7 +55,7 @@ public interface EventRegistry<E> {
    * @return whether the specified event has subscribers
    * @since 1.0.0
    */
-  default boolean subscribed(final @NotNull Class<? extends E> event) {
+  default boolean subscribed(final Class<? extends E> event) {
     return !this.subscriptions(event).isEmpty();
   }
 
@@ -66,7 +67,7 @@ public interface EventRegistry<E> {
    * @param <T> the event type
    * @since 1.0.0
    */
-  default <T extends E> @NotNull EventSubscription<T> subscribe(final @NotNull Class<T> event, final @NotNull EventSubscriber<? super T> subscriber) {
+  default <T extends E> EventSubscription<T> subscribe(final Class<T> event, final EventSubscriber<? super T> subscriber) {
     return this.subscribe(event, EventConfig.defaults(), subscriber);
   }
 
@@ -79,7 +80,7 @@ public interface EventRegistry<E> {
    * @param <T> the event type
    * @since 1.0.0
    */
-  <T extends E> @NotNull EventSubscription<T> subscribe(final @NotNull Class<T> event, final @NotNull EventConfig config, final @NotNull EventSubscriber<? super T> subscriber);
+  <T extends E> EventSubscription<T> subscribe(final Class<T> event, final EventConfig config, final EventSubscriber<? super T> subscriber);
 
   /**
    * Removes subscriptions matching {@code predicate}.
@@ -87,7 +88,7 @@ public interface EventRegistry<E> {
    * @param predicate the predicate used to determine which subscriptions to remove
    * @since 1.0.0
    */
-  void unsubscribeIf(final @NotNull Predicate<EventSubscription<? super E>> predicate);
+  void unsubscribeIf(final Predicate<EventSubscription<? super E>> predicate);
 
   /**
    * Gets an unmodifiable list containing all subscriptions currently registered for events of type {@code event}.
@@ -95,5 +96,5 @@ public interface EventRegistry<E> {
    * @return a list of all subscriptions for events of type {@code event}
    * @since 1.0.0
    */
-  @NotNull List<EventSubscription<? super E>> subscriptions(final @NotNull Class<? extends E> event);
+  List<EventSubscription<? super E>> subscriptions(final Class<? extends E> event);
 }

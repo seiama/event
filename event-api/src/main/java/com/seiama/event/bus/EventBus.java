@@ -25,7 +25,7 @@ package com.seiama.event.bus;
 
 import com.seiama.event.EventSubscription;
 import java.util.OptionalInt;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * An event bus.
@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <E> the base event type
  * @since 1.0.0
  */
+@NullMarked
 public interface EventBus<E> {
   /**
    * Posts an event to all registered subscribers.
@@ -40,7 +41,7 @@ public interface EventBus<E> {
    * @param event the event
    * @since 1.0.0
    */
-  default void post(final @NotNull E event) {
+  default void post(final E event) {
     this.post(event, OptionalInt.empty());
   }
 
@@ -52,7 +53,7 @@ public interface EventBus<E> {
    * @since 1.0.0
    */
   @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-  void post(final @NotNull E event, final @NotNull OptionalInt order);
+  void post(final E event, final OptionalInt order);
 
   /**
    * An event exception handler.
@@ -70,6 +71,6 @@ public interface EventBus<E> {
      * @param <E> the event type
      * @since 1.0.0
      */
-    <E> void eventExceptionCaught(final @NotNull EventSubscription<? super E> subscription, final @NotNull E event, final @NotNull Throwable throwable);
+    <E> void eventExceptionCaught(final EventSubscription<? super E> subscription, final E event, final Throwable throwable);
   }
 }

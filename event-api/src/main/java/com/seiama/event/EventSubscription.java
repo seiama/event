@@ -23,7 +23,7 @@
  */
 package com.seiama.event;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * A subscription to an event.
@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <E> the event type
  * @since 1.0.0
  */
+@NullMarked
 public interface EventSubscription<E> {
   /**
    * Gets the event type.
@@ -38,7 +39,7 @@ public interface EventSubscription<E> {
    * @return the event type
    * @since 1.0.0
    */
-  @NotNull Class<E> event();
+  Class<E> event();
 
   /**
    * Gets the configuration.
@@ -46,7 +47,7 @@ public interface EventSubscription<E> {
    * @return the configuration
    * @since 1.0.0
    */
-  @NotNull EventConfig config();
+  EventConfig config();
 
   /**
    * Gets the subscriber.
@@ -54,7 +55,7 @@ public interface EventSubscription<E> {
    * @return the subscriber
    * @since 1.0.0
    */
-  @NotNull EventSubscriber<? super E> subscriber();
+  EventSubscriber<? super E> subscriber();
 
   /**
    * Disposes this subscription.

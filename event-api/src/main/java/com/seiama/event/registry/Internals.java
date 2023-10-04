@@ -25,15 +25,16 @@ package com.seiama.event.registry;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 // based on code from seiama/commons
+@NullMarked
 final class Internals {
   private Internals() {
   }
 
   @SuppressWarnings("unchecked")
-  static <T> @NotNull List<Class<? super T>> ancestors(final @NotNull Class<T> type) {
+  static <T> List<Class<? super T>> ancestors(final Class<T> type) {
     final List<Class<? super T>> types = new ArrayList<>();
     types.add(type);
     for (int i = 0; i < types.size(); i++) {
