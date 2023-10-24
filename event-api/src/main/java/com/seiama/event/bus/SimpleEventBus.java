@@ -80,12 +80,34 @@ public class SimpleEventBus<E> implements EventBus<E> {
   protected boolean accepts(final EventSubscription<? super E> subscription, final E event, final OptionalInt order) {
     final EventConfig config = subscription.config();
 
-    if (config.exact() && event.getClass() != subscription.event()) return false;
+    if (config.exact()) {
+      if (event.getClass() != subscription.event()) {
+        return false;
+      }
+    }
 
-    if (order.isPresent() && config.order() != order.getAsInt()) return false;
+    if (order.isPresent()) {
+      if (config.order() != order.getAsInt()) {
+        return false;
+      }
+    }
 
-    if (!config.acceptsCancelled() && event instanceof Cancellable && ((Cancellable) event).cancelled()) return false;
+    if (!config.acceptsCancelled()) {
+      if (this.currentlyCancelled(event)) {
+        return false;
+      }
+    }
 
     return true;
+  }
+
+  /**
+   * Checks if {@code event} is cancelled.
+   *
+   * @param event the event
+   * @return {@code true} if the event is cancelled, {@code false} otherwise
+   */
+  protected boolean currentlyCancelled(final E event) {
+    return event instanceof Cancellable && ((Cancellable) event).cancelled();
   }
 }
