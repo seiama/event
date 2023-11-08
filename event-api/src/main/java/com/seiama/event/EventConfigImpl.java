@@ -31,5 +31,60 @@ record EventConfigImpl(
   boolean acceptsCancelled,
   boolean exact
 ) implements EventConfig {
-  static final EventConfig DEFAULTS = new EventConfigImpl(DEFAULT_ORDER, DEFAULT_ACCEPTS_CANCELLED, DEFAULT_EXACT);
+  static final EventConfigImpl DEFAULTS = new EventConfigImpl(DEFAULT_ORDER, DEFAULT_ACCEPTS_CANCELLED, DEFAULT_EXACT);
+
+  static EventConfigImpl create(
+    final int order,
+    final boolean acceptsCancelled,
+    final boolean exact
+  ) {
+    if (order == DEFAULT_ORDER && acceptsCancelled == DEFAULT_ACCEPTS_CANCELLED && exact == DEFAULT_EXACT) {
+      return DEFAULTS;
+    }
+    return new EventConfigImpl(order, acceptsCancelled, exact);
+  }
+
+  @Override
+  public EventConfig order(final int order) {
+    return create(order, this.acceptsCancelled, this.exact);
+  }
+
+  @Override
+  public EventConfig acceptsCancelled(final boolean acceptsCancelled) {
+    return create(this.order, acceptsCancelled, this.exact);
+  }
+
+  @Override
+  public EventConfig exact(final boolean exact) {
+    return create(this.order, this.acceptsCancelled, exact);
+  }
+
+  static final class BuilderImpl implements Builder {
+    private int order = DEFAULT_ORDER;
+    private boolean acceptsCancelled = DEFAULT_ACCEPTS_CANCELLED;
+    private boolean exact = DEFAULT_EXACT;
+
+    @Override
+    public Builder order(final int order) {
+      this.order = order;
+      return this;
+    }
+
+    @Override
+    public Builder acceptsCancelled(final boolean acceptsCancelled) {
+      this.acceptsCancelled = acceptsCancelled;
+      return this;
+    }
+
+    @Override
+    public Builder exact(final boolean exact) {
+      this.exact = exact;
+      return this;
+    }
+
+    @Override
+    public EventConfig build() {
+      return create(this.order, this.acceptsCancelled, this.exact);
+    }
+  }
 }

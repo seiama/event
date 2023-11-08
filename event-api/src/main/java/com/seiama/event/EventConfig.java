@@ -62,14 +62,39 @@ public interface EventConfig {
   }
 
   /**
+   * Creates a new configuration.
+   *
+   * @param order the post order
+   * @param acceptsCancelled if cancelled events are accepted
+   * @param exact if only the exact event type is accepted
+   * @return a configuration
+   * @since 1.0.0
+   */
+  static EventConfig of(
+    final int order,
+    final boolean acceptsCancelled,
+    final boolean exact
+  ) {
+    return new EventConfigImpl(order, acceptsCancelled, exact);
+  }
+
+  /**
+   * Creates a new builder.
+   *
+   * @return a new builder
+   * @since 1.0.0
+   */
+  static Builder builder() {
+    return new EventConfigImpl.BuilderImpl();
+  }
+
+  /**
    * Gets the post order.
    *
    * @return the post order
    * @since 1.0.0
    */
-  default int order() {
-    return DEFAULT_ORDER;
-  }
+  int order();
 
   /**
    * Sets the post order.
@@ -78,9 +103,7 @@ public interface EventConfig {
    * @return an {@link EventConfig}
    * @since 1.0.0
    */
-  default EventConfig order(final int order) {
-    return new EventConfigImpl(order, this.acceptsCancelled(), this.exact());
-  }
+  EventConfig order(final int order);
 
   /**
    * Gets if cancelled events are accepted.
@@ -88,9 +111,7 @@ public interface EventConfig {
    * @return if cancelled events are accepted
    * @since 1.0.0
    */
-  default boolean acceptsCancelled() {
-    return DEFAULT_ACCEPTS_CANCELLED;
-  }
+  boolean acceptsCancelled();
 
   /**
    * Sets if cancelled events are accepted.
@@ -99,9 +120,7 @@ public interface EventConfig {
    * @return an {@link EventConfig}
    * @since 1.0.0
    */
-  default EventConfig acceptsCancelled(final boolean acceptsCancelled) {
-    return new EventConfigImpl(this.order(), acceptsCancelled, this.exact());
-  }
+  EventConfig acceptsCancelled(final boolean acceptsCancelled);
 
   /**
    * Gets if only the exact event type is accepted.
@@ -109,9 +128,7 @@ public interface EventConfig {
    * @return if only the exact event type is accepted
    * @since 1.0.0
    */
-  default boolean exact() {
-    return DEFAULT_EXACT;
-  }
+  boolean exact();
 
   /**
    * Sets if only the exact event type is accepted.
@@ -120,7 +137,47 @@ public interface EventConfig {
    * @return an {@link EventConfig}
    * @since 1.0.0
    */
-  default EventConfig exact(final boolean exact) {
-    return new EventConfigImpl(this.order(), this.acceptsCancelled(), exact);
+  EventConfig exact(final boolean exact);
+
+  /**
+   * Builder.
+   *
+   * @since 1.0.0
+   */
+  interface Builder {
+    /**
+     * Sets the post order.
+     *
+     * @param order the post order
+     * @return {@code this}
+     * @since 1.0.0
+     */
+    Builder order(final int order);
+
+    /**
+     * Sets if cancelled events are accepted.
+     *
+     * @param acceptsCancelled if cancelled events are accepted
+     * @return {@code this}
+     * @since 1.0.0
+     */
+    Builder acceptsCancelled(final boolean acceptsCancelled);
+
+    /**
+     * Sets if only the exact event type is accepted.
+     *
+     * @param exact if only the exact event type is accepted
+     * @return {@code this}
+     * @since 1.0.0
+     */
+    Builder exact(final boolean exact);
+
+    /**
+     * Builds.
+     *
+     * @return an {@link EventConfig}
+     * @since 1.0.0
+     */
+    EventConfig build();
   }
 }
