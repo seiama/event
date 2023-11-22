@@ -25,9 +25,11 @@ package com.seiama.event;
 
 import java.util.UUID;
 import java.util.function.Predicate;
-import org.jetbrains.annotations.NotNull;
 
-public class OwnedSubscriber<E> implements EventSubscriber<E> {
+public record OwnedSubscriber<E>(
+  UUID owner,
+  EventSubscriber<E> body
+) implements EventSubscriber<E> {
   public static <E> Predicate<EventSubscription<? super E>> unsubscribeOwner(final UUID owner) {
     return subscription -> {
       final EventSubscriber<? super E> subscriber = subscription.subscriber();
@@ -35,16 +37,8 @@ public class OwnedSubscriber<E> implements EventSubscriber<E> {
     };
   }
 
-  public final UUID owner;
-  public final EventSubscriber<E> body;
-
-  public OwnedSubscriber(final UUID owner, final EventSubscriber<E> body) {
-    this.owner = owner;
-    this.body = body;
-  }
-
   @Override
-  public void on(final @NotNull E event) throws Throwable {
+  public void on(final E event) throws Throwable {
     this.body.on(event);
   }
 }

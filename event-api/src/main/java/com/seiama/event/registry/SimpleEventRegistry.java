@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import static java.util.Objects.requireNonNull;
 
@@ -157,7 +158,7 @@ public class SimpleEventRegistry<E> implements EventRegistry<E> {
     @Override
     public void dispose() {
       synchronized (SimpleEventRegistry.this.lock) {
-        final List<EventSubscription<? super T>> subscriptions = yayGenerics(SimpleEventRegistry.this.unbaked.get(this.event));
+        final @Nullable List<EventSubscription<? super T>> subscriptions = yayGenerics(SimpleEventRegistry.this.unbaked.get(this.event));
         if (subscriptions != null) {
           subscriptions.remove(this);
           SimpleEventRegistry.this.baked.clear();

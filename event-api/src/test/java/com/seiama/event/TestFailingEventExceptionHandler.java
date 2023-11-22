@@ -24,7 +24,6 @@
 package com.seiama.event;
 
 import com.seiama.event.bus.EventBus;
-import org.jetbrains.annotations.NotNull;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -35,7 +34,7 @@ public final class TestFailingEventExceptionHandler implements EventBus.EventExc
   }
 
   @Override
-  public <E> void eventExceptionCaught(final @NotNull EventSubscription<? super E> subscription, final @NotNull E event, final @NotNull Throwable throwable) {
+  public <E> void eventExceptionCaught(final EventBus<? super E> bus, final EventSubscription<? super E> subscription, final E event, final Throwable throwable) {
     fail(subscription + " failed", throwable);
   }
 }

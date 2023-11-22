@@ -65,12 +65,13 @@ public interface EventBus<E> {
     /**
      * Handles a caught exception.
      *
+     * @param bus the event bus
      * @param subscription the event subscription
      * @param event the event
      * @param throwable the exception
      * @param <E> the event type
      * @since 1.0.0
      */
-    <E> void eventExceptionCaught(final EventSubscription<? super E> subscription, final E event, final Throwable throwable);
+    <E> void eventExceptionCaught(final EventBus<? super E> bus, final EventSubscription<? super E> subscription, final E event, final Throwable throwable);
   }
 }

@@ -70,7 +70,7 @@ public class SimpleEventBus<E> implements EventBus<E> {
         try {
           subscription.subscriber().on(event);
         } catch (final Throwable t) {
-          this.exceptions.eventExceptionCaught(subscription, event, t);
+          this.exceptions.eventExceptionCaught(this, subscription, event, t);
         }
       }
     }
